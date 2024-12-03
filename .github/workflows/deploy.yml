@@ -1,0 +1,32 @@
+name: Docker Build and Deploy
+
+on:
+  push:
+    branches:
+      - main  # 在 main 分支推送时触发
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    # 1. 检出代码（主要用于 GitHub Actions 的上下文，不影响服务器）
+    - name: Checkout code
+      uses: actions/checkout@v3
+      
+    # 使用 SSH 部署到目标服务器
+    - name: Deploy to Server
+      uses: appleboy/ssh-action@v0.1.12
+      with:
+        host: ${{ secrets.SERVER_IP }}
+        username: ${{ secrets.SERVER_USER }}
+        # key: ${{ secrets.SERVER_PRIVATE_KEY }}
+        port: ${{ secrets.PORT }}
+        script: |
+          cd /express            # 项目目录
+          git reset --hard                    # 确保干净的工作区
+          git pull origin main 
+          # docker pull your-dockerhub-username/your-image-name:latest
+          # docker stop your-container-name || true
+          # docker rm your-container-name || true
+          # docker run -d --name your-container-name -p 3000:3000 your-dockerhub-username/your-image-name:latest
