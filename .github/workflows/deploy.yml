@@ -16,12 +16,12 @@ jobs:
       
     # 使用 SSH 部署到目标服务器
     - name: Deploy to Server
-      uses: appleboy/ssh-action@v0.1.12
+      uses: invi5H/ssh-action@v1
       with:
-        host: ${{ secrets.SERVER_IP }}
-        username: ${{ secrets.SERVER_USER }}
-        # key: ${{ secrets.SERVER_PRIVATE_KEY }}
-        port: ${{ secrets.PORT }}
+        SSH_HOST: ${{ secrets.SERVER_IP }}
+        SSH_USER: ${{ secrets.SERVER_USER }}
+        SSH_KEY: ${{ secrets.SERVER_PRIVATE_KEY }}
+        SSH_PORT: ${{ secrets.SERVER_PORT }}
         script: |
           cd /express            # 项目目录
           git reset --hard                    # 确保干净的工作区
