@@ -23,17 +23,20 @@ async function readFile(){
 // 提供扫描视频文件的接口
 router.get('/videos', async (req, res) => {
   try {
-    const videos = await readFile(); // 异步读取 keys.json 文件
-    res.json({ code: 200, data: videos, message: 'success' }); // 返回视频文件列表
+    // const videos = await readFile(); // 异步读取 keys.json 文件
+    // res.json({ code: 200, data: videos, message: 'success' }); // 返回视频文件列表
+    res.json({ code: 200, data: [{"BV": "LOSER"},{"BV":"GOOD BOY"}], message: 'success' }); 
   } catch (err) {
     res.status(500).json({ code: 500, data: null, message: 'Internal Server Error' });
   }
 });
 
 // 提供视频流的接口
-router.get('/video/:bv', (req, res) => {
-  const videoPath = path.join('/Users/zhengdixin/mp4/', req.params.bv + '.mp4');
-  
+router.get('/videos/:bv', (req, res) => {
+  // 获取项目根目录
+  const rootDir = process.cwd();
+  const videoPath = path.join(rootDir,'public/videos/', req.params.bv+'.mp4');
+  console.log(videoPath);
   const stat = fs.statSync(videoPath);
   const fileSize = stat.size;
   const range = req.headers.range;
@@ -66,8 +69,18 @@ router.get('/video/:bv', (req, res) => {
   }
 });
 
-router.get('/music/:filename', (req, res) => {
-  const audioPath = path.join('/Users/zhengdixin/mp3/', req.params.filename + '.mp3');
+// 提供扫描视频文件的接口
+router.get('/audios', async (req, res) => {
+  try {
+    res.json({ code: 200, data: [{"BV": "伍佰 - 突然的自我 (Live)"},{"BV":"信乐团 - 离歌"},{"BV":"周华健 - 刀剑如梦"}], message: 'success' }); 
+  } catch (err) {
+    res.status(500).json({ code: 500, data: null, message: 'Internal Server Error' });
+  }
+});
+
+router.get('/audios/:filename', (req, res) => {
+  const rootDir = process.cwd();
+  const audioPath = path.join(rootDir,'public/audios/', req.params.filename + '.mp3');
   
   try {
     const stat = fs.statSync(audioPath);
